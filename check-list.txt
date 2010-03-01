@@ -1,0 +1,50 @@
+- variable declaration
+
+[qualifiers] type name [=...], ...;
+type name1, name2;
+type name = expr;
+type name1 = expr, name2;
+
+at most one storage qualifier
+
+- fonction declaration
+
+type name(params);
+
+----------------------------------------------------------------------
+-- illegal
+----------------------------------------------------------------------
+
+int float; // float is reserved
+int gl_foo; // gl_ prefix is reserved unless for redeclaration
+int foo__bar; // double underscore is reserved
+
+int 1a;
+
+f(); // return type should be void if f doesn't return a value
+void i; // void only for return type or parameter
+bool done = 1; // 1 is no of type bool
+int i = 5000000000; // value too large
+
+sampler2D a; // samplers can be used only to declare uniforms or as function parameters
+// samplers can not be operands in expressions (except for array indexing, structure field selection and in parentheses
+a = ...; // sampler can't be assigned to, nor used as out, nor initialized.
+// more in 4.1.7
+
+qual struct name { ... }; // qualifier qual can be present only with declarators
+struct { qual int a; }; // qual can only be a precision qualifier
+struct { int a = 1; }; // no initializers
+struct { int a[]; }; // array size should be specified by a integral constant expression greater than zero
+// anonymous structures and nested structures are not allowed
+
+// array size in declaration should be integral constant expression
+// array size con be omitted then redeclared
+// array size in parameter should be integral constant expression
+float a[5][3]; // array of arrays is illegal
+float[5] a[3]; // same thing
+//implicitlty sized arrays cannot be assigned or cannot be applied the length method.
+
+//fonction declaration should occur at global scope
+
+
+
