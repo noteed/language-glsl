@@ -47,6 +47,11 @@ parsingTests =
 -- constraints, and some sanity check funtions should be provided
 -- (to build only legal ASTs).
 
+parsePrettyId :: TranslationUnit -> Bool
+parsePrettyId e = case pass translationUnit (prettyShow e) of
+  Left _ -> False
+  Right e' -> e == e'
+
 parsePrettyIdExpr :: Expr -> Bool
 parsePrettyIdExpr e = case pass expression (prettyShow e) of
   Left _ -> False

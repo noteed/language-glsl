@@ -216,9 +216,9 @@ instance Pretty Expr where
     FieldSelection e1 f -> prettyParen (p > 16) $
       pPrintPrec l 16 e1 <> char '.' <> text f
     MethodCall e1 i ps -> prettyParen (p > 16) $
-      pPrintPrec l 16 e1 <> char '.' <> pPrint i <> parens (pPrint ps)
+      pPrintPrec l 16 e1 <> char '.' <> pPrint i <+> parens (pPrint ps)
     FunctionCall i ps -> prettyParen (p > 16) $
-      pPrint i <> parens (pPrint ps)
+      pPrint i <+> parens (pPrint ps)
     PostInc e1 -> prettyParen (p > 15) $
       pPrintPrec l 15 e1 <+> text "++"
     PostDec e1 -> prettyParen (p > 15) $
@@ -301,7 +301,7 @@ instance Pretty ParameterQualifier where
 instance Pretty Statement where
   pPrint s = case s of
   -- declaration statement
-    DeclarationStatement d -> pPrint d <> semi
+    DeclarationStatement d -> pPrint d
   -- jump statement
     Continue -> text "continue" <> semi
     Break -> text "break" <> semi

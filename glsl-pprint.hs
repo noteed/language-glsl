@@ -4,7 +4,7 @@ import System.Environment (getArgs)
 import Text.PrettyPrint.HughesPJClass
 
 import Language.GLSL
-import Language.GLSL.Tests (tests)
+import Language.GLSL.Tests (parsePrettyId, tests)
 
 info :: [String]
 info = 
@@ -23,7 +23,15 @@ main = do
     [fn] -> do
       content <- readFile fn
       putStrLn . show . parse $ content
-    ["-p",fn] -> do
+    ["--check", fn] -> do
+      content <- readFile fn
+      case parse content of
+        Left err -> putStrLn $ "parse error:\n" ++ show err
+        Right ast ->
+          if parsePrettyId ast
+            then putStrLn "parse . pretty == id"
+            else putStrLn "parse . pretty /= id"
+    ["-p", fn] -> do
       content <- readFile fn
       case parse content of
         Left err -> putStrLn $ "parse error:\n" ++ show err
