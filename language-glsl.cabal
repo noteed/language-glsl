@@ -1,6 +1,6 @@
 name:                language-glsl
 version:             0.0.0
-Cabal-Version:       >= 1.2
+Cabal-Version:       >= 1.8
 synopsis:            GLSL abstract syntax tree, parser, and pretty-printer
 description:
   The package language-glsl is a Haskell library for the
@@ -11,24 +11,33 @@ category:            Language, Graphics
 license:             BSD3
 license-file:        LICENSE
 author:              Vo Minh Thu
-maintainer:          noteed@gmail.com
+maintainer:          thu@hypered.com
 build-type:          Simple
 
-executable glsl-pprint
-  main-is:             glsl-pprint.hs
-  build-depends:       base, parsec, pretty, prettyclass,
-                       HUnit
-  ghc-options:         -Wall
-                       -O2
+source-repository head
+  type: git
+  location: https://github.com/noteed/language-glsl
 
 library
   build-depends:       base,
+                       HUnit,
                        parsec,
-                       HUnit
+                       prettyclass
   ghc-options:         -Wall
-                       -O2
   exposed-modules:     Language.GLSL,
-                       Language.GLSL.Syntax,
                        Language.GLSL.Parser,
-                       Language.GLSL.Pretty
+                       Language.GLSL.Pretty,
+                       Language.GLSL.Syntax,
+                       Language.GLSL.Tests
+
+executable glsl-pprint
+  main-is:             glsl-pprint.hs
+  hs-source-dirs:      bin/
+  build-depends:       base,
+                       HUnit,
+                       language-glsl,
+                       parsec,
+                       pretty,
+                       prettyclass
+  ghc-options:         -Wall
 
