@@ -21,6 +21,12 @@ executable glsl-pprint
   ghc-options:         -Wall
                        -O2
 
+executable glsl-compact
+  main-is:             glsl-compact.hs
+  build-depends:       base, parsec, pretty, prettyclass, HUnit
+  ghc-options          -Wall
+                       -O2
+
 library
   build-depends:       base,
                        parsec,
@@ -30,5 +36,6 @@ library
   exposed-modules:     Language.GLSL,
                        Language.GLSL.Syntax,
                        Language.GLSL.Parser,
-                       Language.GLSL.Pretty
+                       Language.GLSL.Pretty,
+                       Language.GLSL.Compact
 
