@@ -739,11 +739,10 @@ structDeclarator :: P StructDeclarator
 structDeclarator = do
   i <- identifier
   choice
-    [ lbracket >> rbracket >> return (StructDeclarator i (Just Nothing))
-    , do lbracket
-         e <- constantExpression
+    [ do lbracket
+         e <- optionMaybe constantExpression
          rbracket
-         return $ StructDeclarator i (Just $ Just e)
+         return $ StructDeclarator i (Just e)
     , return $ StructDeclarator i Nothing
     ]
 

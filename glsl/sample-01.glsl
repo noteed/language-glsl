@@ -120,3 +120,7 @@ void main ()
     return;
 }
 
+layout (std140) uniform PatternBlock
+{ float pattern[100];
+  float arr[];
+};
