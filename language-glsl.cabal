@@ -1,5 +1,5 @@
 name:                language-glsl
-version:             0.0.0
+version:             0.0.1
 Cabal-Version:       >= 1.8
 synopsis:            GLSL abstract syntax tree, parser, and pretty-printer
 description:
@@ -11,7 +11,7 @@ category:            Language, Graphics
 license:             BSD3
 license-file:        LICENSE
 author:              Vo Minh Thu
-maintainer:          thu@hypered.com
+maintainer:          noteed@gmail.com
 build-type:          Simple
 
 source-repository head
@@ -19,7 +19,7 @@ source-repository head
   location: https://github.com/noteed/language-glsl
 
 library
-  build-depends:       base,
+  build-depends:       base < 5,
                        HUnit,
                        parsec,
                        prettyclass
@@ -33,7 +33,7 @@ library
 executable glsl-pprint
   main-is:             glsl-pprint.hs
   hs-source-dirs:      bin/
-  build-depends:       base,
+  build-depends:       base < 5,
                        HUnit,
                        language-glsl,
                        parsec,
