@@ -106,5 +106,17 @@ void main ()
 {
   if (intensity < 0.0) /* a comment */
     return;
+
+  if (a & b)
+    return;
+
+  if (a | b)
+    return;
+
+  if (a && b)
+    return;
+
+  if (a || b)
+    return;
 }
 
