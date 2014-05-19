@@ -261,6 +261,9 @@ infixLeft s r = Infix (lexeme (try $ string s) >> return r) AssocLeft
 infixLeft' :: String -> (a -> a -> a) -> Operator Char S a
 infixLeft' s r = Infix (lexeme (try $ string s >> notFollowedBy (char '=')) >> return r) AssocLeft
 
+infixLeft'' :: Char -> (a -> a -> a) -> Operator Char S a
+infixLeft'' c r = Infix (lexeme (try $ char c >> notFollowedBy (oneOf (c:"="))) >> return r) AssocLeft
+
 infixRight :: String -> (a -> a -> a) -> Operator Char S a
 infixRight s r = Infix (lexeme (try $ string s) >> return r) AssocRight
 
@@ -272,9 +275,9 @@ conditionalTable =
   , [infixLeft' "<" Lt, infixLeft' ">" Gt
     ,infixLeft "<=" Lte, infixLeft ">=" Gte]
   , [infixLeft "==" Equ, infixLeft "!=" Neq]
-  , [infixLeft' "&" BitAnd]
+  , [infixLeft'' '&' BitAnd]
   , [infixLeft' "^" BitXor]
-  , [infixLeft' "|" BitOr]
+  , [infixLeft'' '|' BitOr]
   , [infixLeft "&&" And]
   , [infixLeft "||" Or]
   ]
