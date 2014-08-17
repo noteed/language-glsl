@@ -20,24 +20,33 @@ source-repository head
 
 library
   build-depends:       base < 5,
-                       HUnit,
                        parsec,
                        prettyclass
   ghc-options:         -Wall
   exposed-modules:     Language.GLSL,
                        Language.GLSL.Parser,
                        Language.GLSL.Pretty,
-                       Language.GLSL.Syntax,
-                       Language.GLSL.Tests
+                       Language.GLSL.Syntax
 
 executable glsl-pprint
   main-is:             glsl-pprint.hs
   hs-source-dirs:      bin/
   build-depends:       base < 5,
-                       HUnit,
                        language-glsl,
                        parsec,
                        pretty,
                        prettyclass
   ghc-options:         -Wall
 
+Test-Suite tests
+  Type:            exitcode-stdio-1.0
+  build-depends:   base < 5,
+                   HUnit,
+                   language-glsl,
+                   parsec,
+                   prettyclass,
+                   test-framework,
+                   test-framework-hunit
+  ghc-options:     -Wall
+  Hs-Source-Dirs:  tests
+  main-is:         Tests.hs

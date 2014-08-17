@@ -1,21 +1,17 @@
-module Language.GLSL.Tests where
+module Main where
 
 import Text.ParserCombinators.Parsec hiding (State, parse) -- TODO clean
 import Text.PrettyPrint.HughesPJClass (prettyShow, Pretty)
 import Test.HUnit
+import Test.Framework (defaultMain)
+import Test.Framework.Providers.HUnit (hUnitTestToTests)
 
 import Language.GLSL.Syntax
 import Language.GLSL.Parser
 import Language.GLSL.Pretty ()
 
-----------------------------------------------------------------------
--- exported tests
-----------------------------------------------------------------------
-
-tests :: IO ()
-tests = do
-  mapM_ runTestTT parsingTests
-  return ()
+main :: IO ()
+main = defaultMain . hUnitTestToTests . TestList $ parsingTests
 
 parsingTests :: [Test]
 parsingTests =
