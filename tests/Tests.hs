@@ -30,6 +30,8 @@ parsingTests =
     map declarationsId testDeclarationsTrue
   , TestLabel "function definitions id" $ TestList $
     map functionDefinitionsId testFunctionDefinitionsTrue
+
+  , sampleFileTest
   ]
 
 ----------------------------------------------------------------------
@@ -453,3 +455,17 @@ legalTranslationUnitsTests = TestLabel "legal translation unit" $
   TestList $ map (doesParse translationUnit) $
   testDeclarationsTrue ++ testFunctionDefinitionsTrue
 
+----------------------------------------------------------------------
+-- kitchen sink
+----------------------------------------------------------------------
+
+sampleFileTest :: Test
+sampleFileTest = TestLabel "Parse/Pretty glsl/sample-01.glsl test" . TestCase . assert $ do
+  content <- readFile $ "glsl/sample-01.glsl"
+  case parse content of
+    Left err -> do
+      putStrLn $ "parse error: \n" ++ show err
+      return False
+    Right ast ->
+      return $ parsePrettyId ast
+  
