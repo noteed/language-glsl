@@ -1,21 +1,17 @@
-module Language.GLSL.Tests where
+module Main where
 
 import Text.ParserCombinators.Parsec hiding (State, parse) -- TODO clean
 import Text.PrettyPrint.HughesPJClass (prettyShow, Pretty)
 import Test.HUnit
+import Test.Framework (defaultMain)
+import Test.Framework.Providers.HUnit (hUnitTestToTests)
 
 import Language.GLSL.Syntax
 import Language.GLSL.Parser
 import Language.GLSL.Pretty ()
 
-----------------------------------------------------------------------
--- exported tests
-----------------------------------------------------------------------
-
-tests :: IO ()
-tests = do
-  mapM_ runTestTT parsingTests
-  return ()
+main :: IO ()
+main = defaultMain . hUnitTestToTests . TestList $ parsingTests
 
 parsingTests :: [Test]
 parsingTests =
@@ -34,6 +30,8 @@ parsingTests =
     map declarationsId testDeclarationsTrue
   , TestLabel "function definitions id" $ TestList $
     map functionDefinitionsId testFunctionDefinitionsTrue
+
+  , sampleFileTest
   ]
 
 ----------------------------------------------------------------------
@@ -457,3 +455,17 @@ legalTranslationUnitsTests = TestLabel "legal translation unit" $
   TestList $ map (doesParse translationUnit) $
   testDeclarationsTrue ++ testFunctionDefinitionsTrue
 
+----------------------------------------------------------------------
+-- kitchen sink
+----------------------------------------------------------------------
+
+sampleFileTest :: Test
+sampleFileTest = TestLabel "Parse/Pretty glsl/sample-01.glsl test" . TestCase . assert $ do
+  content <- readFile $ "glsl/sample-01.glsl"
+  case parse content of
+    Left err -> do
+      putStrLn $ "parse error: \n" ++ show err
+      return False
+    Right ast ->
+      return $ parsePrettyId ast
+  
