@@ -12,7 +12,7 @@ import Language.GLSL.Syntax
 
 prettyBinary :: Pretty a =>
   PrettyLevel -> Rational -> Rational -> String -> a -> a -> Doc
-prettyBinary l p op o e1 e2 = prettyParen (p > op) $
+prettyBinary l p op o e1 e2 = maybeParens (p > op) $
   pPrintPrec l op e1 <+> text o <+> pPrintPrec l op e2
 
 option :: Pretty a => Maybe a -> Doc
@@ -211,30 +211,30 @@ instance Pretty Expr where
     BoolConstant True -> text "true"
     BoolConstant False -> text "false"
   -- postfixExpression
-    Bracket e1 e2 -> prettyParen (p > 16) $
+    Bracket e1 e2 -> maybeParens (p > 16) $
       pPrintPrec l 16 e1 <> brackets (pPrint e2)
-    FieldSelection e1 f -> prettyParen (p > 16) $
+    FieldSelection e1 f -> maybeParens (p > 16) $
       pPrintPrec l 16 e1 <> char '.' <> text f
-    MethodCall e1 i ps -> prettyParen (p > 16) $
+    MethodCall e1 i ps -> maybeParens (p > 16) $
       pPrintPrec l 16 e1 <> char '.' <> pPrint i <+> parens (pPrint ps)
-    FunctionCall i ps -> prettyParen (p > 16) $
+    FunctionCall i ps -> maybeParens (p > 16) $
       pPrint i <+> parens (pPrint ps)
-    PostInc e1 -> prettyParen (p > 15) $
+    PostInc e1 -> maybeParens (p > 15) $
       pPrintPrec l 15 e1 <+> text "++"
-    PostDec e1 -> prettyParen (p > 15) $
+    PostDec e1 -> maybeParens (p > 15) $
       pPrintPrec l 15 e1 <+> text "--"
-    PreInc e1 -> prettyParen (p > 15) $
+    PreInc e1 -> maybeParens (p > 15) $
       text "++" <+> pPrintPrec l 15 e1
-    PreDec e1 -> prettyParen (p > 15) $
+    PreDec e1 -> maybeParens (p > 15) $
       text "--" <+> pPrintPrec l 15 e1
   -- unary expression
-    UnaryPlus e1 -> prettyParen (p > 15) $
+    UnaryPlus e1 -> maybeParens (p > 15) $
       text "+" <> pPrintPrec l 15 e1
-    UnaryNegate e1 -> prettyParen (p > 15) $
+    UnaryNegate e1 -> maybeParens (p > 15) $
       text "-" <> pPrintPrec l 15 e1
-    UnaryNot e1 -> prettyParen (p > 15) $
+    UnaryNot e1 -> maybeParens (p > 15) $
       text "!" <> pPrintPrec l 15 e1
-    UnaryOneComplement e1 -> prettyParen (p > 15) $
+    UnaryOneComplement e1 -> maybeParens (p > 15) $
       text "~" <> pPrintPrec l 15 e1
   -- binary expression
     Mul e1 e2 -> prettyBinary l p 14 "*" e1 e2
@@ -256,7 +256,7 @@ instance Pretty Expr where
     And e1 e2 -> prettyBinary l p 6 "&&" e1 e2
 -- TODO Xor 5 "^^"
     Or e1 e2 -> prettyBinary l p 4 "||" e1 e2
-    Selection e1 e2 e3 -> prettyParen (p > 3) $
+    Selection e1 e2 e3 -> maybeParens (p > 3) $
       pPrintPrec l 3 e1 <+> char '?' <+> pPrintPrec l 3 e2
       <+> char ':' <+> pPrintPrec l 3 e3
   -- assignment, the left Expr should be unary expression
@@ -272,7 +272,7 @@ instance Pretty Expr where
     XorAssign e1 e2 -> prettyBinary l p 2 "^=" e1 e2
     OrAssign e1 e2 -> prettyBinary l p 2 "|=" e1 e2
   -- sequence
-    Sequence e1 e2 -> prettyParen (p > 1) $
+    Sequence e1 e2 -> maybeParens (p > 1) $
       pPrintPrec l 1 e1 <> char ',' <+> pPrintPrec l 1 e2
 
 instance Pretty FunctionIdentifier where

@@ -199,14 +199,14 @@ hexadecimal = lexeme $ try $ do
   _ <- char '0'
   _ <- oneOf "Xx"
   d <- many1 hexDigit
-  m <- optionMaybe $ oneOf "Uu" -- TODO
+  _ <- optionMaybe $ oneOf "Uu" -- TODO
   return $ IntConstant Hexadecimal $ read ("0x" ++ d)
 
 octal :: P Expr
 octal = lexeme $ try $ do
   _ <- char '0'
   d <- many1 octDigit
-  m <- optionMaybe $ oneOf "Uu" -- TODO
+  _ <- optionMaybe $ oneOf "Uu" -- TODO
   return $ IntConstant Octal $ read  ("0o" ++ d)
 
 badOctal :: P ()
@@ -216,14 +216,14 @@ decimal :: P Expr
 decimal = lexeme $ try $ do
   d <- many1 digit
   notFollowedBy (char '.' <|> (exponent >> return ' '))
-  m <- optionMaybe $ oneOf "Uu" -- TODO
+  _ <- optionMaybe $ oneOf "Uu" -- TODO
   return $ IntConstant Decimal $ read d
 
 floatExponent :: P Expr
 floatExponent = lexeme $ try $ do
   d <- many1 digit
   e <- exponent
-  m <- optionMaybe $ oneOf "Ff" -- TODO
+  _ <- optionMaybe $ oneOf "Ff" -- TODO
   return $ FloatConstant $ read $ d ++ e
 
 floatPoint :: P Expr
@@ -233,7 +233,7 @@ floatPoint = lexeme $ try $ do
   d' <- many digit
   let d'' = if null d' then "0" else d'
   e <- optionMaybe exponent
-  m <- optionMaybe $ oneOf "Ff" -- TODO
+  _ <- optionMaybe $ oneOf "Ff" -- TODO
   return $ FloatConstant $ read $ d ++ "." ++ d'' ++ maybe "" id e
 
 pointFloat :: P Expr
@@ -241,7 +241,7 @@ pointFloat = lexeme $ try $ do
   _ <- char '.'
   d <- many1 digit
   e <- optionMaybe exponent
-  m <- optionMaybe $ oneOf "Ff"
+  _ <- optionMaybe $ oneOf "Ff"
   return $ FloatConstant $ read $ "0." ++ d ++ maybe "" id e
 
 exponent :: P String
