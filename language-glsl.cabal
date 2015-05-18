@@ -36,7 +36,6 @@ executable glsl-pprint
   build-depends:       base < 5,
                        language-glsl,
                        parsec,
-                       pretty,
                        prettyclass
   ghc-options:         -Wall
 
