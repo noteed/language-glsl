@@ -124,3 +124,7 @@ layout (std140) uniform PatternBlock
 { float pattern[100];
   float arr[];
 };
+
+float x = a / b / c;
+float x = (a / b) / c;
+float x = a / (b / c);
