@@ -10,10 +10,20 @@ import Language.GLSL.Syntax
 -- helpers (TODO clean)
 ----------------------------------------------------------------------
 
+type Assoc = (Rational -> Rational, Rational -> Rational)
+
+assocLeft, assocRight, assocNone :: Assoc
+assocLeft  = (id,bump)
+assocRight = (bump,id)
+assocNone  = (bump,bump)
+
+bump :: Rational -> Rational
+bump = (+ 0.5)
+
 prettyBinary :: Pretty a =>
-  PrettyLevel -> Rational -> Rational -> String -> a -> a -> Doc
-prettyBinary l p op o e1 e2 = prettyParen (p > op) $
-  pPrintPrec l op e1 <+> text o <+> pPrintPrec l op e2
+  PrettyLevel -> Rational -> Rational -> Assoc -> String -> a -> a -> Doc
+prettyBinary l p op (lf,rf) o e1 e2 = prettyParen (p > op) $
+  pPrintPrec l (lf op) e1 <+> text o <+> pPrintPrec l (rf op) e2
 
 option :: Pretty a => Maybe a -> Doc
 option Nothing = empty
@@ -237,40 +247,40 @@ instance Pretty Expr where
     UnaryOneComplement e1 -> prettyParen (p > 15) $
       text "~" <> pPrintPrec l 15 e1
   -- binary expression
-    Mul e1 e2 -> prettyBinary l p 14 "*" e1 e2
-    Div e1 e2 -> prettyBinary l p 14 "/" e1 e2
-    Mod e1 e2 -> prettyBinary l p 14 "%" e1 e2
-    Add e1 e2 -> prettyBinary l p 13 "+" e1 e2
-    Sub e1 e2 -> prettyBinary l p 13 "-" e1 e2
-    LeftShift e1 e2 -> prettyBinary l p 12 "<<" e1 e2
-    RightShift e1 e2 -> prettyBinary l p 12 ">>" e1 e2
-    Lt e1 e2 -> prettyBinary l p 11 "<" e1 e2
-    Gt e1 e2 -> prettyBinary l p 11 ">" e1 e2
-    Lte e1 e2 -> prettyBinary l p 11 "<=" e1 e2
-    Gte e1 e2 -> prettyBinary l p 11 ">=" e1 e2
-    Equ e1 e2 -> prettyBinary l p 10 "==" e1 e2
-    Neq e1 e2 -> prettyBinary l p 10 "!=" e1 e2
-    BitAnd e1 e2 -> prettyBinary l p 9 "&" e1 e2
-    BitXor e1 e2 -> prettyBinary l p 8 "^" e1 e2
-    BitOr e1 e2 -> prettyBinary l p 7 "|" e1 e2
-    And e1 e2 -> prettyBinary l p 6 "&&" e1 e2
+    Mul        e1 e2 -> prettyBinary l p 14 assocLeft "*" e1 e2
+    Div        e1 e2 -> prettyBinary l p 14 assocLeft "/" e1 e2
+    Mod        e1 e2 -> prettyBinary l p 14 assocLeft "%" e1 e2
+    Add        e1 e2 -> prettyBinary l p 13 assocLeft "+" e1 e2
+    Sub        e1 e2 -> prettyBinary l p 13 assocLeft "-" e1 e2
+    LeftShift  e1 e2 -> prettyBinary l p 12 assocLeft "<<" e1 e2
+    RightShift e1 e2 -> prettyBinary l p 12 assocLeft ">>" e1 e2
+    Lt         e1 e2 -> prettyBinary l p 11 assocLeft "<" e1 e2
+    Gt         e1 e2 -> prettyBinary l p 11 assocLeft ">" e1 e2
+    Lte        e1 e2 -> prettyBinary l p 11 assocLeft "<=" e1 e2
+    Gte        e1 e2 -> prettyBinary l p 11 assocLeft ">=" e1 e2
+    Equ        e1 e2 -> prettyBinary l p 10 assocLeft "==" e1 e2
+    Neq        e1 e2 -> prettyBinary l p 10 assocLeft "!=" e1 e2
+    BitAnd     e1 e2 -> prettyBinary l p 9 assocLeft "&" e1 e2
+    BitXor     e1 e2 -> prettyBinary l p 8 assocLeft "^" e1 e2
+    BitOr      e1 e2 -> prettyBinary l p 7 assocLeft "|" e1 e2
+    And        e1 e2 -> prettyBinary l p 6 assocLeft "&&" e1 e2
 -- TODO Xor 5 "^^"
-    Or e1 e2 -> prettyBinary l p 4 "||" e1 e2
+    Or         e1 e2 -> prettyBinary l p 4 assocLeft "||" e1 e2
     Selection e1 e2 e3 -> prettyParen (p > 3) $
       pPrintPrec l 3 e1 <+> char '?' <+> pPrintPrec l 3 e2
       <+> char ':' <+> pPrintPrec l 3 e3
   -- assignment, the left Expr should be unary expression
-    Equal e1 e2 -> prettyBinary l p 2 "=" e1 e2
-    MulAssign e1 e2 -> prettyBinary l p 2 "*=" e1 e2
-    DivAssign e1 e2 -> prettyBinary l p 2 "/=" e1 e2
-    ModAssign e1 e2 -> prettyBinary l p 2 "%=" e1 e2
-    AddAssign e1 e2 -> prettyBinary l p 2 "+=" e1 e2
-    SubAssign e1 e2 -> prettyBinary l p 2 "-=" e1 e2
-    LeftAssign e1 e2 -> prettyBinary l p 2 "<<=" e1 e2
-    RightAssign e1 e2 -> prettyBinary l p 2 ">>=" e1 e2
-    AndAssign e1 e2 -> prettyBinary l p 2 "&=" e1 e2
-    XorAssign e1 e2 -> prettyBinary l p 2 "^=" e1 e2
-    OrAssign e1 e2 -> prettyBinary l p 2 "|=" e1 e2
+    Equal       e1 e2 -> prettyBinary l p 2 assocRight "=" e1 e2
+    MulAssign   e1 e2 -> prettyBinary l p 2 assocRight "*=" e1 e2
+    DivAssign   e1 e2 -> prettyBinary l p 2 assocRight "/=" e1 e2
+    ModAssign   e1 e2 -> prettyBinary l p 2 assocRight "%=" e1 e2
+    AddAssign   e1 e2 -> prettyBinary l p 2 assocRight "+=" e1 e2
+    SubAssign   e1 e2 -> prettyBinary l p 2 assocRight "-=" e1 e2
+    LeftAssign  e1 e2 -> prettyBinary l p 2 assocRight "<<=" e1 e2
+    RightAssign e1 e2 -> prettyBinary l p 2 assocRight ">>=" e1 e2
+    AndAssign   e1 e2 -> prettyBinary l p 2 assocRight "&=" e1 e2
+    XorAssign   e1 e2 -> prettyBinary l p 2 assocRight "^=" e1 e2
+    OrAssign    e1 e2 -> prettyBinary l p 2 assocRight "|=" e1 e2
   -- sequence
     Sequence e1 e2 -> prettyParen (p > 1) $
       pPrintPrec l 1 e1 <> char ',' <+> pPrintPrec l 1 e2
