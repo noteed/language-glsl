@@ -5,6 +5,7 @@ import Text.PrettyPrint.HughesPJClass
 import Text.Printf
 
 import Language.GLSL.Syntax
+import Prelude hiding ((<>))
 
 ----------------------------------------------------------------------
 -- helpers (TODO clean)
