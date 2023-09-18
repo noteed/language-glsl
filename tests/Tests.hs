@@ -352,7 +352,10 @@ testDeclarationsTrue =
   , "int i = (1 - 5) * 4 + 3;"
   , "int i = (1 - 5) * (4 + 3);"
   , "bool b = 1 < 2;"
-
+  , "#extension GL_EXT_frag_depth : enable"
+  , "#extension OES_texture_float :  require"
+  , "#extension OES_standard_derivatives  :  warn"
+  , "#extension  EXT_depth_clamp:disable"
   ]
 
 testDeclarationsFalse :: [String]
@@ -390,6 +393,12 @@ testDeclarationsFalse =
   , "float a[5][3];"
 -- interpolation qualifier may only preced [centroid]in/out.
 --  , "smooth const int a;"
+  , "#extension : enable"
+  , "#extension OES_texture_float  require"
+  , "#extension OES_standard_derivatives : abc"
+  , "#extension EXT_depth_clamp"
+  , "#extension 123 : require"
+  , "#extensionEXT_depth_clamp:disable"
   ]
 
 ----------------------------------------------------------------------

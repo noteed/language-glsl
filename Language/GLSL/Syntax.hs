@@ -51,6 +51,14 @@ data Declaration =
   | Block TypeQualifier String [Field] (Maybe (String, Maybe (Maybe Expr))) -- constant expression
 -- e.g. layout (origin_upper_left) in; TODO check if it is only used for default layout.
   | TQ TypeQualifier
+  | ExtensionDirective String ExtensionBehavior
+  deriving (Show, Eq)
+
+data ExtensionBehavior =
+  ExtensionRequire
+  | ExtensionEnable
+  | ExtensionWarn
+  | ExtensionDisable
   deriving (Show, Eq)
 
 -- TODO regroup String (Maybe (Maybe Expr)) as Declarator and use it for
