@@ -1,6 +1,6 @@
+cabal-version:       2.2
 name:                language-glsl
-version:             0.3.0
-Cabal-Version:       >= 1.8
+version:             0.4.0.0
 synopsis:            GLSL abstract syntax tree, parser, and pretty-printer
 description:
   The package language-glsl is a Haskell library for the
@@ -8,11 +8,10 @@ description:
   GLSL 1.50 code.
 
 category:            Language, Graphics
-license:             BSD3
+license:             BSD-3-Clause
 license-file:        LICENSE
 author:              Vo Minh Thu
 maintainer:          noteed@gmail.com
-build-type:          Simple
 
 extra-source-files:  glsl/sample-01.glsl
 
