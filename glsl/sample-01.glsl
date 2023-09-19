@@ -1,3 +1,7 @@
+#extension OES_texture_float : enable
+#extension EXT_frag_depth : require
+#extension OES_standard_derivatives : warn
+#extension WEBGL_compressed_texture_s3tc : disable
 bool success;
 bool done = false;
 int i;

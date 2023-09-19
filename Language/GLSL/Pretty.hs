@@ -73,6 +73,13 @@ instance Pretty Declaration where
   pPrint (Precision pq t) = text "precision" <+> pPrint pq <+> pPrint t <> semi
   pPrint (Block tq i ds n) = vcat [pPrint tq <+> text i, lbrace, nest 2 (vcat $ map pPrint ds), rbrace <+> ident n <> semi]
   pPrint (TQ tq) = pPrint tq <> semi
+  pPrint (ExtensionDirective name behavior) = text "#extension" <+> text name <+> text ":" <+> pPrint behavior
+
+instance Pretty ExtensionBehavior where
+  pPrint ExtensionRequire = text "require"
+  pPrint ExtensionEnable = text "enable"
+  pPrint ExtensionWarn = text "warn"
+  pPrint ExtensionDisable = text "disable"
 
 instance Pretty InitDeclarator where
   pPrint (InitDecl i a b) = text i <> indexing a <> initialize b

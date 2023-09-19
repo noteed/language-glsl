@@ -460,6 +460,17 @@ declaration = choice
               semicolon
               return $ Block q i s m
          ]
+  , do _ <- keyword "#extension"
+       extensionName <- identifier
+       _ <- colon
+       behavior <-
+         choice
+            [ keyword "require" >> return ExtensionRequire
+            , keyword "enable" >> return ExtensionEnable
+            , keyword "warn" >> return ExtensionWarn
+            , keyword "disable" >> return ExtensionDisable
+            ]
+       return $ ExtensionDirective extensionName behavior
   ]
   where idecl = do
           i <- identifier
